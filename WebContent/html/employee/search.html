@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../../js/employee/search.js"></script>
+</head>
+<body>
+	<ul>
+		<li>
+			<label>所属部署</label>
+			<select id="department_id">
+				<option value="" selected>指定しない</option>
+			</select>
+		</li>
+		<li>
+			<label>社員ID</label>
+			<input type="search" id="employee_id" />
+		</li>
+		<li>
+			<label>名前に含む文字</label>
+			<input type="search" id="name_include" />
+		</li>
+		<li>
+			<input type="submit" id="submit" value="送信" />
+		</li>
+	</ul>
+
+	<h2 id="message"></h2>
+
+	<table id="employee_table">
+		<thead>
+			<tr>
+				<th>社員ID</th>
+				<th>名前</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+</html>

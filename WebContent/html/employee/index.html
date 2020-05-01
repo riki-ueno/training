@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../../js/employee/index.js"></script>
+</head>
+<body>
+	<h2>社員一覧</h2>
+	<h2 id="message"></h2>
+	<table>
+		<thead>
+			<tr>
+				<th>社員ID</th>
+				<th>名前</th>
+			</tr>
+		</thead>
+		<tbody id=employee_list>
+		</tbody>
+	</table>
+
+	<ul>
+		<li><input type="button" onclick="location.href='./edit.html?method=create'" value="新規作成" /></li>
+		<li><input type="button" onclick="location.href='./search.html'" value="検索" /></li>
+	</ul>
+</body>
+</html>
