@@ -1,7 +1,5 @@
 package app.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,17 +8,9 @@ import java.util.List;
 
 import app.model.Department;
 
-public class DepartmentDAO {
-	private final String DATABASE_URL = "jdbc:oracle:thin:@localhost:1521:XE";
-	private final String USER_NAME = "webapp2";
-	private final String PASSWORD  = "webapp2";
-
+public class DepartmentDAO extends DAOBase {
 	public DepartmentDAO() {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(String.format("JDBCドライバーのロードに失敗しました。詳細:[%s]",e.getMessage()));
-		}
+		super();
 	}
 
 	public List<Department> all() {
@@ -126,10 +116,5 @@ public class DepartmentDAO {
 		} catch (SQLException e) {
 			throw new RuntimeException(String.format("更新処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
 		}
-	}
-
-	private PreparedStatement createPreparedStatement(String sql) throws SQLException {
-		Connection con = DriverManager.getConnection(DATABASE_URL, USER_NAME, PASSWORD);
-		return con.prepareStatement(sql);
 	}
 }

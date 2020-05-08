@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0px;
+}
+
+header {
+	border-bottom: solid 1px #000000
+}
+
+header nav ul {
+	text-align: right;
+}
+
+header nav ul li{
+    display: inline;
+    margin-right: 10px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+}
+
+header nav ul li a:hover{
+    border-bottom: dotted 1px #000000;
+}

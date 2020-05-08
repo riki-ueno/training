@@ -1,7 +1,5 @@
 package app.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,17 +9,9 @@ import app.model.Employee;
 import app.model.EmployeeDetail;
 import app.model.EmployeeToken;
 
-public class EmployeeTokenDAO {
-	private final String DATABASE_URL = "jdbc:oracle:thin:@localhost:1521:XE";
-	private final String USER_NAME = "webapp2";
-	private final String PASSWORD  = "webapp2";
-
+public class EmployeeTokenDAO extends DAOBase {
 	public EmployeeTokenDAO() {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(String.format("JDBCドライバーのロードに失敗しました。詳細:[%s]",e.getMessage()));
-		}
+		super();
 	}
 
 	public boolean create(EmployeeToken employeeToken) {
@@ -45,13 +35,14 @@ public class EmployeeTokenDAO {
 		}
 	}
 
-	public boolean existsToken(String token) {
-		String sql = "SELECT * FROM employee_tokens where token = ?";
+	public boolean existsToken(String employeeId, String token) {
+		String sql = "SELECT * FROM employee_tokens where employee_id = ? and token = ?";
 
 		try (
 				PreparedStatement pstmt = createPreparedStatement(sql);
 		) {
-			pstmt.setString(1, token);
+			pstmt.setString(1, employeeId);
+			pstmt.setString(2, token);
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -61,7 +52,28 @@ public class EmployeeTokenDAO {
 				return false;
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException(String.format("挿入処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
+			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
+		}
+	}
+
+	public boolean exists(EmployeeToken employeeToken) {
+		String sql = "SELECT * FROM employee_tokens WHERE employee_id = ? and token = ?";
+
+		try(
+			PreparedStatement pstmt = createPreparedStatement(sql);
+		) {
+			pstmt.setString(1, employeeToken.getEmployeeId());
+			pstmt.setString(2, employeeToken.getToken());
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
 		}
 	}
 
@@ -105,6 +117,7 @@ public class EmployeeTokenDAO {
 				employeeDetail.setRetiredAt(rs.getDate("retired_at"));
 				employee.setEmployeeDetail(employeeDetail);
 				employeeToken.setEmployee(employee);
+				employeeToken.setEmployeeId(rs.getString("employee_tokens_employee_id"));
 			}
 
 			return employeeToken;
@@ -126,14 +139,5 @@ public class EmployeeTokenDAO {
 		} catch (SQLException e) {
 			throw new RuntimeException(String.format("挿入処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
 		}
-	}
-
-	private PreparedStatement createPreparedStatement(String sql) throws SQLException {
-		Connection con = createConnection();
-		return con.prepareStatement(sql);
-	}
-
-	private Connection createConnection() throws SQLException {
-		return DriverManager.getConnection(DATABASE_URL, USER_NAME, PASSWORD);
 	}
 }

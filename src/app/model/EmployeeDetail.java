@@ -2,6 +2,10 @@ package app.model;
 
 import java.sql.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.math.NumberUtils;
+
 public class EmployeeDetail {
 	private String employeeId;
 	private String name;
@@ -128,5 +132,37 @@ public class EmployeeDetail {
 
 	public void setRetiredAt(Date retiredAt) {
 		this.retiredAt = retiredAt;
+	}
+
+	static public EmployeeDetail build(HttpServletRequest request) {
+		EmployeeDetail employeeDetail = new EmployeeDetail();
+
+		String employeeId = request.getParameter("employeeId");
+		String name        = request.getParameter("name");
+		String sex         =request.getParameter("sex");
+		String age         = request.getParameter("age");
+		String postalCode = request.getParameter("postalCode");
+		String prefName   =request.getParameter("prefName");
+		String address    = request.getParameter("address");
+		String password   =request.getParameter("password");
+		String departmentId =request.getParameter("departmentId");
+		String roleId     = request.getParameter("roleId");
+		String joinedAt   =request.getParameter("joinedAt");
+		String retiredAt  = request.getParameter("retiredAt");
+
+		employeeDetail.setEmployeeId(employeeId);
+		employeeDetail.setName(name);
+		employeeDetail.setSex(sex);
+		if (NumberUtils.isDigits(age)) employeeDetail.setAge(Integer.parseInt(age));
+		employeeDetail.setPostalCode(postalCode);
+		employeeDetail.setPrefName(prefName);
+		employeeDetail.setAddress(address);
+		employeeDetail.setPassword(password);
+		employeeDetail.setSex(sex);
+		if (NumberUtils.isDigits(departmentId)) employeeDetail.setDepartmentId(Integer.parseInt(departmentId));
+		if (NumberUtils.isDigits(roleId)) employeeDetail.setRoleId(Integer.parseInt(roleId));
+		if (joinedAt != null && !joinedAt.isEmpty()) employeeDetail.setJoinedAt(Date.valueOf(joinedAt));
+		if (retiredAt != null && !retiredAt.isEmpty()) employeeDetail.setRetiredAt(Date.valueOf(retiredAt));
+		return employeeDetail;
 	}
 }

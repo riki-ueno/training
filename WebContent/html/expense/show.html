@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="../../css/header.css">
+	<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="../../js/expense/show.js"></script>
+	<script type="text/javascript" src="../../js/header.js"></script>
+</head>
+<body>
+	<ul>
+		<li>
+			<label for="id">ID</label>
+			<input type="number" id="id" readonly />
+		</li>
+		<li>
+			<label for="claimer_id">申請者</label>
+			<input type="text" id="claimer_id" readonly />
+		</li>
+		<li>
+			<label for="claimed_at">申請日</label>
+			<input type="date" id="claimed_at" readonly />
+		</li>
+		<li>
+			<label for="title">タイトル</label>
+			<input type="text" id="title" required />
+		</li>
+		<li>
+			<label for="payment_destination">支払先</label>
+			<input type="text" id="payment_destination" required />
+		</li>
+		<li>
+			<label for="amount">金額</label>
+			<input type="number" id="amount" required />
+		</li>
+		<li>
+			<input type="button" id="submit" value="保存" />
+		</li>
+		<li>
+			<label for="status">ステータス</label>
+			<input type="text" id="status" readonly />
+		</li>
+		<li>
+			<label for="reason">却下理由</label>
+			<input type="text" id="reason" readonly />
+		</li>
+		<li>
+			<label for="updater_id">更新者</label>
+			<input type="text" id="updater_id" readonly />
+		</li>
+		<li>
+			<label for="updated_at">更新日</label>
+			<input type="date" id="updated_at" readonly />
+		</li>
+	</ul>
+</body>
+</html>

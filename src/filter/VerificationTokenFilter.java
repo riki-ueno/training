@@ -14,11 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import app.dao.EmployeeTokenDAO;
+import app.model.EmployeeToken;
 
 /**
  * Servlet Filter implementation class VerificationToken
  */
-@WebFilter("/LoginTest")
+@WebFilter(filterName="vertification-token", urlPatterns = {"/api/employee/*", "/api/department/*", "/api/expense/*", "/api/auth/*", "/api/authentication/logout", "/api/authentication/role"})
 public class VerificationTokenFilter implements Filter {
 
     /**
@@ -39,11 +40,19 @@ public class VerificationTokenFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletResponse httpResponse = (HttpServletResponse)response;
-		HttpSession session = ((HttpServletRequest)request).getSession(false);
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+		HttpSession session = ((HttpServletRequest) request).getSession(false);
 
-		if (session != null && session.getAttribute("token") != null && new EmployeeTokenDAO().existsToken((String) session.getAttribute("token"))) {
-			chain.doFilter(request, response);
+		if (session != null && session.getAttribute("employeeId") != null && session.getAttribute("token") != null) {
+			EmployeeToken employeeToken = new EmployeeToken();
+			employeeToken.setEmployeeId((String) session.getAttribute("employeeId"));
+			employeeToken.setToken((String) session.getAttribute("token"));
+
+			if (new EmployeeTokenDAO().exists(employeeToken)) {
+				chain.doFilter(request, response);
+			} else {
+				httpResponse.setStatus(401);
+			}
 		} else {
 			httpResponse.setStatus(401);
 		}

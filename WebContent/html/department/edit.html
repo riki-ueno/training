@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
-<script type="text/javascript" src="../../js/department/edit.js"></script>
-</head>
-<body>
-	<form>
-		<label for="department_name">名前</label>
-		<input type="hidden" id="department_id" />
-		<input type="text" id="department_name" />
-		<input type="button" id="submit" value="設定" />
-		<input type="button" value="キャンセル" onclick="location.href='./index.html'" />
-	</form>
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<link rel="stylesheet" href="../../css/header.css">
+		<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../../js/department/edit.js"></script>
+		<script type="text/javascript" src="../../js/header.js"></script>
+	</head>
+	<body>
+		<form>
+			<input type="hidden" id="department_id" />
+			<label for="department_name">名前</label>
+			<input type="text" id="department_name" />
+			<input type="button" id="submit" value="設定" />
+			<input type="button" value="キャンセル" onclick="location.href='./index.html'" />
+		</form>
+	</body>
 </html>

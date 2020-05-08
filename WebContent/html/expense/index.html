@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../../css/header.css">
+<script type="text/javascript" src="../../jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../../js/expense/index.js"></script>
+<script type="text/javascript" src="../../js/header.js"></script>
+</head>
+<body>
+	<p>自分の申請一覧:</p>
+
+	<table id="own_expense_table">
+		<thead>
+			<tr>
+				<th>申請ID</th>
+				<th>申請日</th>
+				<th>更新日</th>
+				<th>申請者</th>
+				<th>タイトル</th>
+				<th>金額</th>
+				<th>ステータス</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<button onclick="location.href = './new.html'">申請追加</button>
+
+	<p class="manager">判断待ちの申請一覧:</p>
+
+	<table id="expense_table" class="manager">
+		<thead>
+			<tr>
+				<th>申請ID</th>
+				<th>申請日</th>
+				<th>更新日</th>
+				<th>申請者</th>
+				<th>タイトル</th>
+				<th>金額</th>
+				<th>ステータス</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</body>
+</html>

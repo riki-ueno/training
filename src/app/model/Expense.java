@@ -2,6 +2,10 @@ package app.model;
 
 import java.sql.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.math.NumberUtils;
+
 public class Expense {
 	private int id;
 	private Date claimedAt;
@@ -110,5 +114,33 @@ public class Expense {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	static public Expense build(HttpServletRequest request) {
+		Expense expense = new Expense();
+
+		String id = request.getParameter("id");
+		String claimedAt = request.getParameter("claimedAt");
+		String claimerId = request.getParameter("claimerId");
+		String title = request.getParameter("title");
+		String paymentDestination = request.getParameter("paymentDestination");
+		String amount = request.getParameter("amount");
+		String updatedAt = request.getParameter("updatedAt");
+		String updaterId = request.getParameter("updaterId");
+		String status = request.getParameter("status");
+		String reason = request.getParameter("reason");
+
+		if (NumberUtils.isDigits(id)) expense.setId(Integer.parseInt(id));
+		if (claimedAt != null && !claimedAt.isEmpty()) expense.setClaimedAt(Date.valueOf(claimedAt));
+		expense.setClaimerId(claimerId);
+		expense.setTitle(title);
+		expense.setPaymentDestination(paymentDestination);
+		if (NumberUtils.isDigits(amount)) expense.setAmount(Integer.parseInt(amount));
+		if (updatedAt != null && !updatedAt.isEmpty()) expense.setUpdatedAt(Date.valueOf(updatedAt));
+		expense.setUpdaterId(updaterId);
+		if (NumberUtils.isDigits(status)) expense.setStatus(Integer.parseInt(status));
+		expense.setReason(reason);
+
+		return expense;
 	}
 }

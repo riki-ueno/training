@@ -30,31 +30,61 @@ function submit() {
 
 	$.ajax({
 		type : 'GET',
-		url : '/EmployeesInfoManageTool/api/employee/search',
+		url : '/EmployeesInfoManageTool/api/authentication/role',
 		dataType: "json",
-		data: requestQuery,
-		success: function(result) {
-			const message = $("#message")
-			const employeeTable = $("#employee_table")
+		success: function(role) {
+			$.ajax({
+				type : 'GET',
+				url : '/EmployeesInfoManageTool/api/employee/search',
+				dataType: "json",
+				data: requestQuery,
+				success: function(result) {
+					const message = $("#message")
+					const employeeTable = $("#employee_table")
 
-			if (result.length === 0) {
-				message.html("登録されている社員がいません。")
-				employeeTable.attr("hidden", true)
-			} else {
-				message.html("")
-				employeeTable.attr("hidden", false)
-				for (let employee of result) {
-					const editLink = 'location.href="./edit.html?id=' + employee.id + '&method=update"'
-					const deleteLink = 'location.href="./delete.html?id=' + employee.id + '"'
-					const editButton = "<input type='button' onclick='" + editLink + "' value='編集' />"
-					const deleteButton = "<input type='button' employee_id='" +employee.id + "' onclick='employeeDeleteRequest(this)' value='削除' />"
-					const html = "<tr><td>" + employee.id + "</td><td>" + employee.employeeDetail.name + "</td><td>" + editButton + "</td><td>" + deleteButton + "</td></tr>"
-					employeeTable.find("tbody").append(html)
+					if (result.length === 0) {
+						message.html("登録されている社員がいません。")
+						employeeTable.attr("hidden", true)
+					} else {
+						message.html("")
+						employeeTable.attr("hidden", false)
+						for (let employee of result) {
+							let html
+							if (role.roleName === "manager") {
+								const editLink = 'location.href="./edit.html?id=' + employee.id + '&method=update"'
+								const editButton = "<input type='button' onclick='" + editLink + "' value='編集' />"
+								const deleteLink = 'location.href="./delete.html?id=' + employee.id + '"'
+								const deleteButton = "<input type='button' employee_id='" +employee.id + "' onclick='employeeDeleteRequest(this)' value='削除' />"
+								html = "<tr><td>" + employee.id + "</td><td>" + employee.employeeDetail.name + "</td><td>" + editButton + "</td><td>" + deleteButton + "</td></tr>"
+							} else if ( employee.id === role.employeeId) {
+								const editLink = 'location.href="./edit.html?id=' + employee.id + '&method=update"'
+								const editButton = "<input type='button' onclick='" + editLink + "' value='編集' />"
+								html = "<tr><td>" + employee.id + "</td><td>" + employee.employeeDetail.name + "</td><td>" + editButton + "</td>"
+							} else {
+								html = "<tr><td>" + employee.id + "</td><td>" + employee.employeeDetail.name + "</td>"
+							}
+
+							employeeTable.find("tbody").append(html)
+						}
+					}
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrown) {
+					if (XMLHttpRequest.status === 401) {
+						alert("ログインしてください")
+						location.href = "/EmployeesInfoManageTool/html/authentication/login.html"
+					} else {
+						alert("通信に失敗しました")
+					}
 				}
-			}
+			})
 		},
 		error:function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("データの通信に失敗しました")
+			if (XMLHttpRequest.status === 401) {
+				alert("ログインしてください")
+				location.href = "/EmployeesInfoManageTool/html/authentication/login.html"
+			} else {
+				alert("通信に失敗しました")
+			}
 		}
 	})
 }

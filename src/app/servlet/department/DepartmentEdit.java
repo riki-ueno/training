@@ -34,13 +34,7 @@ public class DepartmentEdit extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
-		Department department;
-
-		if (id == null || id.length() == 0) {
-			department = new Department();
-		} else {
-			department = new DepartmentDAO().get(Integer.parseInt(id));
-		}
+		Department department = new DepartmentDAO().get(Integer.parseInt(id));
 
 		PrintWriter pw = response.getWriter();
 		pw.append(new ObjectMapper().writeValueAsString(department));
@@ -50,25 +44,10 @@ public class DepartmentEdit extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		String name = request.getParameter("name");
-		String method = request.getParameter("method");
-
-		DepartmentDAO departmentDAO = new DepartmentDAO();
-		Department department = new Department();
-		department.setName(name);
-
-		boolean result = false;
-
-		if ("create".equals(method)) {
-			result = departmentDAO.create(department);
-		} else if ("update".equals(method)){
-			department.setId(Integer.parseInt(id));
-			result = departmentDAO.update(department);
-		}
+		Department department = Department.build(request);
 
 		PrintWriter pw = response.getWriter();
-		pw.append(new ObjectMapper().writeValueAsString(result));
+		pw.append(new ObjectMapper().writeValueAsString(new DepartmentDAO().update(department)));
 	}
 
 }

@@ -1,7 +1,6 @@
 package app.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,22 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import app.model.Department;
 import app.model.Employee;
 import app.model.EmployeeDetail;
 import app.model.Role;
 
-public class EmployeeDAO {
-	private final String DATABASE_URL = "jdbc:oracle:thin:@localhost:1521:XE";
-	private final String USER_NAME = "webapp2";
-	private final String PASSWORD  = "webapp2";
-
+public class EmployeeDAO extends DAOBase {
 	public EmployeeDAO() {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(String.format("JDBCドライバーのロードに失敗しました。詳細:[%s]",e.getMessage()));
-		}
+		super();
 	}
 
 	public List<Employee> all() {
@@ -278,6 +271,28 @@ public class EmployeeDAO {
 		}
 	}
 
+	public boolean updatePassword(Employee employee) {
+		String sql = "UPDATE employee_details SET password = ? WHERE employee_id = ?";
+
+		try (
+				PreparedStatement pstmt = createPreparedStatement(sql);
+		) {
+			pstmt.setString(1, DigestUtils.sha256Hex(employee.getEmployeeDetail().getPassword()));
+			pstmt.setString(2, employee.getId());
+
+			int resultCount = pstmt.executeUpdate();
+
+			if (resultCount != 1) {
+				return false;
+			}
+
+			return true;
+
+		} catch (SQLException e) {
+			throw new RuntimeException(String.format("更新処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
+		}
+	}
+
 	public boolean delete(String id) {
 		String sql = "DELETE FROM employees WHERE id = ?";
 		try (
@@ -296,14 +311,5 @@ public class EmployeeDAO {
 		} catch (SQLException e) {
 			throw new RuntimeException(String.format("更新処理の実施中にエラーが発生しました。詳細:[%s]", e.getMessage()));
 		}
-	}
-
-	private PreparedStatement createPreparedStatement(String sql) throws SQLException {
-		Connection con = createConnection();
-		return con.prepareStatement(sql);
-	}
-
-	private Connection createConnection() throws SQLException {
-		return DriverManager.getConnection(DATABASE_URL, USER_NAME, PASSWORD);
 	}
 }
